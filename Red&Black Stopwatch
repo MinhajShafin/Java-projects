@@ -1,0 +1,127 @@
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class StopWatch implements ActionListener{
+public static void main(String[] args) {
+        new StopWatch();
+    }
+
+    JFrame frame = new JFrame("Stopwatch");
+    JButton startButton = new JButton("Start");
+    JButton resetbutton = new JButton("Reset");
+    JLabel timelabel = new JLabel();
+    int elapsedTime = 0;
+    int min = 0;
+    int sec = 0;
+    int hrs = 0;
+    boolean started = false;
+    String sec_string = String.format("%02d",sec);
+    String min_string = String.format("%02d",min);
+    String hrs_string = String.format("%02d",hrs);
+
+    Timer timer = new Timer(1000, new ActionListener() {
+
+        @Override
+        public void actionPerformed(ActionEvent e) {
+
+            elapsedTime+=1000;
+            hrs = elapsedTime/3600000;
+            min = (elapsedTime/60000)%60;
+            sec = (elapsedTime/1000)%60;
+            sec_string = String.format("%02d",sec);
+            min_string = String.format("%02d",min);
+            hrs_string = String.format("%02d",hrs);
+
+            timelabel.setText(hrs_string+":"+min_string+":"+sec_string);
+
+            }
+        
+    });
+
+    StopWatch(){
+
+        timelabel.setText(hrs_string+":"+min_string+":"+sec_string);
+        timelabel.setBounds(100, 100,200, 100);
+        timelabel.setFont(new Font("Verdana",Font.PLAIN,35));
+        timelabel.setBorder(BorderFactory.createBevelBorder(1));
+        timelabel.setForeground(Color.orange);
+        timelabel.setHorizontalAlignment(JTextField.CENTER);
+
+        startButton.setBounds(100, 200, 100, 60);
+        startButton.setFont(new Font("Verdana",Font.BOLD,20));
+        startButton.setFocusable(false);
+        startButton.setBackground(Color.RED);
+        startButton.setBorder(BorderFactory.createRaisedBevelBorder());
+        startButton.addActionListener(this);
+
+        resetbutton.setBounds(200, 200, 100, 60);
+        resetbutton.setFont(new Font("Verdana",Font.BOLD,20));
+        resetbutton.setFocusable(false);
+        resetbutton.setBackground(Color.darkGray);
+        resetbutton.setForeground(Color.white);
+        resetbutton.setBorder(BorderFactory.createRaisedBevelBorder());
+        resetbutton.addActionListener(this);
+        
+        frame.add(timelabel);
+        frame.add(startButton);
+        frame.add(resetbutton);
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setSize(420, 420);
+        frame.setLayout(null);
+        frame.getContentPane().setBackground(Color.black);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.setResizable(false);
+    }
+
+    @Override
+    public void actionPerformed(ActionEvent e) {
+
+        if(e.getSource()==startButton){
+            start();
+            if(started==false){
+                started = true;
+                startButton.setText("Stop");
+            }
+            else{
+                started=false;
+                startButton.setText("Start");
+                stop();
+            }
+        }
+
+        if(e.getSource()==resetbutton){
+            started = false;
+            startButton.setText("Start");
+            reset();
+        }
+
+    }
+
+    void start(){
+
+        timer.start();
+    }
+
+    void stop(){
+
+        timer.stop();
+    }
+
+    void reset(){
+
+        timer.stop();
+        elapsedTime = 0;
+        sec = 0;
+        min = 0;
+        hrs = 0;
+
+        sec_string = String.format("%02d",sec);
+        min_string = String.format("%02d",min);
+        hrs_string = String.format("%02d",hrs);
+
+        timelabel.setText(hrs_string+":"+min_string+":"+sec_string);
+    }
+    
+}
